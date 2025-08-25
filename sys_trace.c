@@ -149,7 +149,7 @@ int main(int argc, char **argv, char **envp) {
     init();
 
     if (argc < 2) {
-        puts("usage: tracer [tracee]");
+        puts("usage: sys_trace [tracee]");
         return EXIT_FAILURE;
     }
     char **tracee_argv = &argv[1];
