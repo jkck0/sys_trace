@@ -1,0 +1,5 @@
+.vscode/*
+
+# this gets generated during build
+syscall_numbers.h
+sys_trace
