@@ -6,7 +6,7 @@ default:
 
 build:
     python3 extract_syscall_numbers.py
-    gcc -o sys_trace sys_tracer.c -Wall -Werror
+    gcc -o sys_trace sys_trace.c -Wall -Werror
 
 clean:
     rm sys_trace
