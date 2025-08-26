@@ -63,7 +63,7 @@ bool is_runnable(char *file_path, struct stat stat_buf) {
         bool usr_can_run = is_owner && ((stat_buf.st_mode & usr_rx) == usr_rx);
         bool grp_can_run = is_group && ((stat_buf.st_mode & grp_rx) == grp_rx);
 
-        can_run = usr_can_run && grp_can_run;
+        can_run = usr_can_run || grp_can_run;
     } else {
         mode_t other_rx = S_IROTH | S_IXOTH;
         can_run = (stat_buf.st_mode & other_rx) == other_rx;
