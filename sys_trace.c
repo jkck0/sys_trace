@@ -5,6 +5,9 @@
 #define __USE_GNU 1
 #include <string.h>
 #include <signal.h>
+#define __USE_MISC 1
+#include <grp.h>
+#include <pwd.h>
 #include <sys/types.h>
 #include <sys/ptrace.h>
 #include <sys/wait.h>
@@ -52,9 +55,39 @@ void print_syscall_args(__u64 args[6]) {
     printf("]\n");
 }
 
+// check if the user is in the group with given gid
+bool is_in_group(gid_t grp) {
+    struct passwd *pwd = getpwuid(getuid());
+
+    int ngroups;
+    getgrouplist(pwd->pw_name, getegid(), NULL, &ngroups);
+    printf("user %s is in %d groups\n", pwd->pw_name, ngroups);
+
+    gid_t *groups = malloc(sizeof(gid_t) * ngroups);
+    getgrouplist(pwd->pw_name, getegid(), groups, &ngroups);
+
+    bool found = false;
+    for (size_t i = 0; i < ngroups; i++) {
+        if (groups[i] == grp) {
+            found = true;
+            break;
+        }
+    }
+
+    free(groups);
+
+    if (found) {
+        printf("user %s is in the group %d\n", pwd->pw_name, grp);
+    } else {
+        printf("user %s is not in the group %d\n", pwd->pw_name, grp);
+    }
+
+    return found;
+}
+
 bool is_runnable(char *file_path, struct stat stat_buf) {
     bool is_owner = geteuid() == stat_buf.st_uid;
-    bool is_group = getegid() == stat_buf.st_gid;
+    bool is_group = is_in_group(stat_buf.st_gid);
 
     bool can_run;
     if (is_owner || is_group) {
