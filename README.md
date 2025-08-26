@@ -14,6 +14,12 @@ $ ./sys_trace tracee tracee_arg tracee_arg2 ...
 Building `sys_trace` requires:
 - an install of Python 3, which is used to download and extract the syscall numbers from the Linux kernel source code. Because of this, an internet connection is required for the build process
 - the `just` command runner, which is used for building. `just` can be installed [here](https://github.com/casey/just)
+- `gcc` version 5 or above
+
+Additionally, `sys_trace` only works on Linux kernel version 5.3 and above. You can check your kernel version by running:
+```
+$ uname -r
+```
 
 ### Building
 First, clone the source code:
